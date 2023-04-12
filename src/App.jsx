@@ -1,7 +1,5 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './App.css';
-// import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
-// dotenv.config()
 const api = {
 
 key:  import.meta.env.VITE_API_KEY ,
@@ -39,8 +37,11 @@ function App() {
     return `${day} ${date} ${month} ${year}`
   }
 
+  
   return (
-    <div className="app warm">
+<div className={(typeof weather.main !== "undefined") ? ((weather.main.temp < 15) ? 'app rain' : ((weather.main.temp >= 15 && weather.main.temp <= 25 ) ? 'app clouds' : 'app sun')) : 'app'}>
+
+      
      <main>
       <div className="search-box">
        <input
@@ -51,18 +52,23 @@ function App() {
         value={query}
         onKeyDown={search}
         
+        
         />
       </div>
-      <div className="location-box">
-        <div className="location">Thessaloniki, Greece</div>
+      {(typeof weather.main != "undefined") ? (
+      <div>
+        <div className="location-box">
+        <div className="location">{weather.name}, {weather.sys.country}</div>
         <div className="date">{dateBuilder(new Date())}</div>
       </div>
       <div className="weather-box">
         <div className="temp">
-          19°C
+          {Math.round(weather.main.temp)}°C
         </div>
-        <div className="weather">Sunny</div>
+        <div className="weather">{weather.weather[0].main}</div>
       </div>
+      </div>
+      ) : ('') }
      </main>
     </div>
   );
